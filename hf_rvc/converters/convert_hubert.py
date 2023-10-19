@@ -29,9 +29,7 @@ def load_fairseq_hubert(model_path: str, unsafe: bool = False):
 def extract_hubert_config(fairseq_hubert) -> HubertConfig:
     assert isinstance(fairseq_hubert.final_proj, torch.nn.Linear)
 
-    hf_hubert_config = HubertConfig(vocab_size=fairseq_hubert.final_proj.out_features)
-
-    return hf_hubert_config
+    return HubertConfig(vocab_size=fairseq_hubert.final_proj.out_features)
 
 
 def extract_hubert_state(
@@ -87,14 +85,14 @@ def extract_hubert_state(
         print("ERROR: Failed to map key", key)
         return key
 
-    remove_keys = set(["label_embs_concat"])
+    remove_keys = {"label_embs_concat"}
 
     converted_dict = {
         _convert_key(key): value
         for key, value in fairseq_state_dict.items()
         if key not in remove_keys
     }
-    for key in converted_dict.keys():
+    for key in converted_dict:
         if key in required_keys:
             required_keys.remove(key)
     for key in required_keys:

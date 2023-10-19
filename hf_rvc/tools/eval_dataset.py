@@ -53,9 +53,7 @@ def eval_dataset(
     def _get_auto_key(source_gender: str) -> float:
         if auto_m2f and source_gender == "male":
             return 12
-        if auto_f2m and source_gender == "female":
-            return -12
-        return 0
+        return -12 if auto_f2m and source_gender == "female" else 0
 
     dataset = load_dataset(dataset_path, dataset_name, split=dataset_split)
     assert isinstance(dataset, Dataset)
